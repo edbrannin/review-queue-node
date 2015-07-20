@@ -17,16 +17,52 @@ Goals:
 
 ## Things to maybe use
 
+* http://www.toptal.com/nodejs/why-the-hell-would-i-use-node-js
+
 * http://electron.atom.io/ (Desktop app!)
 * http://wix.github.io/react-templates/
 * https://www.npmjs.com/package/simple-plist
 * http://docs.sequelizejs.com/en/latest/ (SQL ORM)
+* https://www.npmjs.com/package/archiver
+* http://davidtheclark.com/its-time-for-everyone-to-learn-about-postcss/
+
+
 * http://socket.io/
 
-* Testing tools at http://thenodeway.io/posts/testing-essentials/
 
 * See the list at http://www.toptal.com/nodejs/why-the-hell-would-i-use-node-js
 * https://www.meteor.com/ (Web apps with the same source server/client side.  Probably not for this.)
 * http://loopback.io/ (framework that can help make native mobile apps)
+
+* https://docs.npmjs.com/files/package.json
+
+## Database
+
 * http://mongoosejs.com/ (MongoDB)
 * http://mongorito.com/ ("more modern" Mongo)
+
+## Testing
+
+* https://theintern.github.io/
+* http://chaijs.com/
+
+* http://thenodeway.io/posts/testing-essentials/
+* http://www.nodeguy.com/test/
+
+## Build tools?
+
+* http://gruntjs.com/
+* https://www.npmjs.com/package/gulp
+* https://medium.com/@preslavrachev/gulp-vs-grunt-why-one-why-the-other-f5d3b398edc4
+
+
+## Hosting?
+
+(OK, Not this app, maybe others)
+
+* https://www.openshift.com/products/pricing
+
+## Other stuff
+
+* https://www.npmjs.com/package/statsd
+* https://www.npmjs.com/package/express
