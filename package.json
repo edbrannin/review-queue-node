@@ -23,5 +23,8 @@
   "dependencies": {
     "archiver": "~0.14.4",
     "simple-plist": "0.0.4"
+  },
+  "devDependencies": {
+    "electron-prebuilt": "~0.30.0"
   }
 }
