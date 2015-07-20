@@ -25,6 +25,9 @@
     "simple-plist": "0.0.4"
   },
   "devDependencies": {
-    "electron-prebuilt": "~0.30.0"
+    "electron-prebuilt": "~0.30.0",
+    "postcss": "~4.1.16",
+    "gulp": "~3.9.0",
+    "intern": "~2.2.2"
   }
 }
