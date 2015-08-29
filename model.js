@@ -19,8 +19,9 @@ var Person = sequelize.define('Person', {
  * - url
  *
  * Item
- * * source_code
- * * source_primary_id
+ * - source_code
+ * - source_primary_id
+ * - current_version_id
  *
  * ItemVersion
  * - item_id
