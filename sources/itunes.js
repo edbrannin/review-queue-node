@@ -11,7 +11,7 @@ function source(model, callback) {
         // TODO URL?
       });
     } else {
-      var iTunes = row;
+      var iTunes = row[0];
     }
     callback(iTunes);
   });
@@ -19,6 +19,6 @@ function source(model, callback) {
 
 exports.scan = function(model, callback, progress_callback) {
   source(model, function(iTunes) {
-    console.log("Added ${{iTunes}}");
+    console.log("Got Source ", iTunes);
   });
 }
