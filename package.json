@@ -24,7 +24,9 @@
     "archiver": "~0.14.4",
     "simple-plist": "0.0.4",
     "sequelize": "~3.6.0",
-    "sqlite3": "~3.0.10"
+    "sqlite3": "~3.0.10",
+    "knex": "~0.8.6",
+    "objection": "~0.2.1"
   },
   "devDependencies": {
     "electron-prebuilt": "~0.30.0",
