@@ -30,6 +30,7 @@ var Person = sequelize.define('Person', {
  * - size_compressed_bytes
  * - size_uncompressed_bytes
  * - description
+ * - file_path
  *
  * ItemIdentifier
  * - item_id
