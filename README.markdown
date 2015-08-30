@@ -22,10 +22,8 @@ Goals:
 * http://electron.atom.io/ (Desktop app!)
 * http://wix.github.io/react-templates/
 * https://www.npmjs.com/package/simple-plist
-* http://docs.sequelizejs.com/en/latest/ (SQL ORM)
 * https://www.npmjs.com/package/archiver
 * http://davidtheclark.com/its-time-for-everyone-to-learn-about-postcss/
-
 
 * http://socket.io/
 
@@ -40,6 +38,13 @@ Goals:
 
 * http://mongoosejs.com/ (MongoDB)
 * http://mongorito.com/ ("more modern" Mongo)
+
+### ORM Shootout
+
+* https://github.com/Vincit/objection.js
+    * See also http://knexjs.org
+* http://bookshelfjs.org/#introduction
+* http://docs.sequelizejs.com/en/latest/
 
 ## Testing
 
