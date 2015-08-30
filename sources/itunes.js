@@ -20,5 +20,6 @@ function source(model, callback) {
 exports.scan = function(model, callback, progress_callback) {
   source(model, function(iTunes) {
     console.log("Got Source ", iTunes);
+    callback(model);
   });
 }
