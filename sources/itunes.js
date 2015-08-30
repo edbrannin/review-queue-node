@@ -5,15 +5,16 @@ function source(model, callback) {
     source_code:SOURCE_CODE,
   }).then(function(row) {
     if (row.length == 0) {
-      return model.Source.query().insert({
+      var iTunes = model.Source.query().insert({
         source_code: SOURCE_CODE,
         name: "iTunes App Store",
         // TODO URL?
       });
     } else {
-      return row;
+      var iTunes = row;
     }
-  }).then(callback(iTunes.value()));
+    callback(iTunes);
+  });
 }
 
 exports.scan = function(model, callback, progress_callback) {

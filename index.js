@@ -1,16 +1,5 @@
-console.log("Hi!");
-
 var model = require("./model.js");
 
-console.log("Mom");
+var itunes_source = require('./sources/itunes.js');
 
-model.sequelize.sync().then(function() {
-  return model.Person.create({
-    username: 'edbrannin',
-    name: 'Ed'
-  });
-}).then(function(ed) {
-  console.log(ed.get({
-    plain: true
-  }))
-});
+itunes_source.scan(model);
