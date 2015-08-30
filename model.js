@@ -1,19 +1,52 @@
-var Sequelize = require('sequelize');
-var sequelize = new Sequelize('review_queue', 'username', 'password', {
-  dialect: 'sqlite'
+var Knex = require('knex');
+var Model = require('objection').Model;
+
+var knex = Knex({
+  client: 'sqlite3',
+  connection: {
+    filename: 'dev.sqlite3'
+  }
 });
 
-var Person = sequelize.define('Person', {
-  username: Sequelize.STRING,
-  name: Sequelize.STRING
-}, {
-  tableName: "people"
-});
+Model.knex(knex);
 
 /*
  * TODO: Add the following models
  *
- * Source?
+ *
+ * ItemNote
+ * - item_id
+ * - created_by
+ * - note
+ *
+ * People
+ * - name
+ * - auth details???
+ *
+ */
+
+function Source() {
+  Model.apply(this, arguments);
+}
+Model.extend(Source);
+// Table name is the only required property.
+Source.tableName = 'sources';
+/*
+Source.relationMappings = {
+  items: {
+    relation: Model.OneToManyRelation,
+    from: 'Items.source_code',
+    to: 'Sources.source_code'
+  },
+}
+*/
+exports.Source = Source;
+
+
+/*
+ * Migrations written:
+ *
+ * Source
  * - name
  * - source_code
  * - url
@@ -50,13 +83,4 @@ var Person = sequelize.define('Person', {
  * - tag_id
  * - created_by => Person.id
  *
- * ItemNote
- * - item_id
- * - created_by
- * - note
- *
- *
  */
-
-exports.sequelize = sequelize;
-exports.Person = Person;
