@@ -5,9 +5,12 @@ function source(model, callback) {
     source_code:SOURCE_CODE,
   }).then(function(row) {
     if (row.length == 0) {
+      var now = Date.now();
       var iTunes = model.Source.query().insert({
         source_code: SOURCE_CODE,
         name: "iTunes App Store",
+        created_at: now,
+        updatd_at: now,
         // TODO URL?
       });
     } else {
