@@ -81,6 +81,36 @@ Source.relationMappings = {
   },
 }
 
+Item.relationMappings = {
+  versions: {
+    relation: Model.OneToManyRelation,
+    modelClass: ItemVersion,
+    join: {
+      from: 'items.id',
+      to: 'item_versions.item_id'
+    },
+  },
+  source: {
+    relation: Model.OneToOneRelation,
+    modelClass: Source,
+    join: {
+      from: 'items.source_code',
+      to: 'sources.source_code'
+    },
+  },
+}
+
+ItemVersion.relationMappings = {
+  item: {
+    relation: Model.OneToOneRelation,
+    modelClass: Item,
+    join: {
+      from: 'items.id',
+      to: 'item_versions.item_id'
+    },
+  },
+}
+
 /*
  * Migrations written:
  *
@@ -102,6 +132,7 @@ Source.relationMappings = {
  * - size_uncompressed_bytes
  * - description
  * - file_path
+ * - plist_json (TODO)
  *
  * ItemIdentifier
  * - item_id
