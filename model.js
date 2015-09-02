@@ -31,13 +31,6 @@ function Source() {
 Model.extend(Source);
 // Table name is the only required property.
 Source.tableName = 'sources';
-Source.relationMappings = {
-  items: {
-    relation: Model.OneToManyRelation,
-    from: 'Items.source_code',
-    to: 'Sources.source_code'
-  },
-}
 exports.Source = Source;
 
 
@@ -60,24 +53,33 @@ Item.relationMappings = {
 exports.Item = Item;
 
 
-
 function ItemVersion() {
   Model.apply(this, arguments);
 }
 Model.extend(ItemVersion);
 // Table name is the only required property.
 ItemVersion.tableName = 'items_versions';
-/*
 ItemVersion.relationMappings = {
-  items: {
+  item: {
     relation: Model.OneToManyRelation,
     from: 'ItemVersions.source_code',
     to: 'ItemVersions.source_code'
   },
 }
-*/
 exports.ItemVersion = ItemVersion;
 
+//Relationships
+
+Source.relationMappings = {
+  items: {
+    relation: Model.OneToManyRelation,
+    modelClass: Item,
+    join: {
+      from: 'items.source_code',
+      to: 'sources.source_code'
+    },
+  },
+}
 
 /*
  * Migrations written:
