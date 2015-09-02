@@ -1,5 +1,8 @@
-var fs = require('fs'),
+var Promise = require("bluebird");
+var fs = require("fs"),
     path = require('path');
+
+Promise.promisifyAll(fs);
 
 var SOURCE_CODE = 'ITUNES';
 
@@ -15,9 +18,9 @@ function find_itunes_root() {
     "Music/iTunes/iTunes Music/"
   ]
   for (var x = 0; x < paths.length; x+= 1) {
-    var path = path.join(getUserHome(), paths[x])
-    if (fs.existsSync(path)) {
-      return path;
+    var p = path.join(getUserHome(), paths[x])
+    if (fs.existsSync(p)) {
+      return p;
     }
   }
 }
@@ -48,6 +51,8 @@ function source(model, callback) {
 exports.scan = function(model, callback, progress_callback) {
   source(model, function(iTunes) {
     //console.log("Got Source ", iTunes);
-    callback(model, iTunes);
+    fs.readdirAsync(mobile_apps_dir()).then(function(items) {
+      console.log("Found %d apps.", items.length);
+    }).then(callback);
   });
 }
