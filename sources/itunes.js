@@ -116,7 +116,7 @@ function find_or_create_item(item_id, source) {
       console.log("CREATING Item", item_id);
       var now = Date.now();
       return model.Item.query().insert({
-        source_code: source.SOURCE_CODE,
+        source_code: source.source_code,
         source_primary_id: item_id,
         created_at: now,
         updated_at: now,

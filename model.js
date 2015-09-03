@@ -58,7 +58,7 @@ function ItemVersion() {
 }
 Model.extend(ItemVersion);
 // Table name is the only required property.
-ItemVersion.tableName = 'items_versions';
+ItemVersion.tableName = 'item_versions';
 ItemVersion.relationMappings = {
   item: {
     relation: Model.OneToManyRelation,
