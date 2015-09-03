@@ -55,9 +55,9 @@ exports.scan = function(progress_callback) {
     var apps_dir = mobile_apps_dir()
     return fs.readdirAsync(apps_dir).then(function(items) {
       console.log("Found %d apps.", items.length);
-      return items.map(function(filename) {
+      return Promise.all(items.map(function(filename) {
         return add_item_from_file(apps_dir, filename, iTunes, progress_callback);
-      });
+      }));
     });
   });
 }
@@ -67,7 +67,7 @@ function add_item_from_file(directory, filename, iTunes, progress_callback) {
 
   var full_path = path.join(directory, filename);
   return read_info_plist(full_path).then(function(info) {
-    console.log("App at", full_path, "has stats", info);
+    console.log("App at", full_path, "has metadata", info);
     return [
       info,
       fs.statAsync(full_path),
@@ -78,7 +78,7 @@ function add_item_from_file(directory, filename, iTunes, progress_callback) {
     return item;
   }).catch(function(err) {
     console.log("FAILED", err);
-  }).done();
+  });
 
   /*
    * If an ItemVersion exists, return.
