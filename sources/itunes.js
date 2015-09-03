@@ -53,6 +53,13 @@ exports.scan = function(model, callback, progress_callback) {
     //console.log("Got Source ", iTunes);
     fs.readdirAsync(mobile_apps_dir()).then(function(items) {
       console.log("Found %d apps.", items.length);
+      items.forEach(function(item) {
+        add_item_from_file(item, iTunes);
+      });
     }).then(callback);
   });
+}
+
+function add_item_from_file(item, iTunes) {
+  console.log("Adding", item, "to", iTunes.source_code, "(" + iTunes.name + ")");
 }
