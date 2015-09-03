@@ -67,15 +67,22 @@ function add_item_from_file(directory, filename, iTunes, progress_callback) {
   var full_path = path.join(directory, filename);
   return read_info_plist(full_path).then(function(info) {
     console.log("App at", full_path, "has stats", info);
-    return [info, fs.statAsync(full_path), find_or_create_item(info, iTunes)];
+    return [
+      info,
+      fs.statAsync(full_path),
+      find_or_create_item(info.itemId, iTunes)
+    ];
   }).spread(function(info, stat, item) {
     console.log("Populating item", item, "with stats", stats, "and plist", info);
+  }).catch(function(err) {
+    console.log("FAILED", err);
   }).done();
+
   /*
    * If an ItemVersion exists, return.
    *
    * Get file stats
-   * Read plist
+   * Read plist: iTunesMetadata.plist
    * Add new Item, if needed
    *
    * Add new ItemVersion
@@ -93,25 +100,30 @@ function add_item_from_file(directory, filename, iTunes, progress_callback) {
 }
 
 function read_info_plist(full_path) {
-  return Promise.resolve({});
+  return Promise.resolve({itemId: 1});
 }
 
-function find_or_create_item(item_id, iTunes) {
-  model.Item.query().where({
-    source_code: iTunes.SOURCE_CODE,
+function find_or_create_item(item_id, source) {
+  console.log("Looking for item", item_id, "in", source.name);
+  return model.Item.query().where({
+    source_code: source.source_code,
     source_primary_id: item_id
   }).then(function(rows) {
     if (rows.length == 0) {
+      console.log("CREATING Item", item_id);
       var now = Date.now();
       return model.Item.query().insert({
-        source_code: iTunes.SOURCE_CODE,
+        source_code: source.SOURCE_CODE,
         source_primary_id: item_id,
         created_at: now,
         updated_at: now,
         // TODO add current_version_id later
       });
     } else {
+      console.log("RETURNING Item", item_id, rows[0]);
       return rows[0];
     }
+  }).catch(function(e) {
+    console.log("WHAT.", e);
   });
 }
