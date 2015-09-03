@@ -132,6 +132,7 @@ ItemVersion.relationMappings = {
  * - size_uncompressed_bytes
  * - description
  * - file_path
+ * - filename (TODO)
  * - plist_json (TODO)
  *
  * ItemIdentifier
