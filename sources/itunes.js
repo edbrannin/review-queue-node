@@ -104,7 +104,7 @@ function add_item_from_file(directory, filename, iTunes, progress_callback) {
 }
 
 function read_info_plist(full_path) {
-  return archive.readAsync(full_path, "iTunesMetadata.plist").then(
+  return archive.readFileAsync(full_path, "iTunesMetadata.plist").then(
     function(contents) {
     return plist.parse(contents);
   });
