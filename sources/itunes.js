@@ -29,27 +29,27 @@ function mobile_apps_dir() {
   return path.join(find_itunes_root(), "Mobile Applications");
 }
 
-function source(model, callback) {
-  model.Source.query().where({
+function source(model) {
+  return model.Source.query().where({
     source_code:SOURCE_CODE,
   }).then(function(rows) {
     if (rows.length == 0) {
       var now = Date.now();
-      model.Source.query().insert({
+      return model.Source.query().insert({
         source_code: SOURCE_CODE,
         name: "iTunes App Store",
         created_at: now,
         updated_at: now,
         // TODO URL?
-      }).then(callback);
+      })
     } else {
-      callback(rows[0]);
+      return rows[0];
     }
   });
 }
 
 exports.scan = function(model, callback, progress_callback) {
-  source(model, function(iTunes) {
+  source(model).then(function(iTunes) {
     //console.log("Got Source ", iTunes);
     var apps_dir = mobile_apps_dir()
     fs.readdirAsync(apps_dir).then(function(items) {
