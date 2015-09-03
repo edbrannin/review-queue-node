@@ -1,6 +1,7 @@
 var Promise = require("bluebird");
 var fs = require("fs"),
     path = require('path');
+var model = require("../model.js");
 
 Promise.promisifyAll(fs);
 
@@ -29,7 +30,7 @@ function mobile_apps_dir() {
   return path.join(find_itunes_root(), "Mobile Applications");
 }
 
-function source(model) {
+function source() {
   return model.Source.query().where({
     source_code:SOURCE_CODE,
   }).then(function(rows) {
@@ -48,16 +49,16 @@ function source(model) {
   });
 }
 
-exports.scan = function(model, callback, progress_callback) {
-  source(model).then(function(iTunes) {
+exports.scan = function(progress_callback) {
+  return source().then(function(iTunes) {
     //console.log("Got Source ", iTunes);
     var apps_dir = mobile_apps_dir()
-    fs.readdirAsync(apps_dir).then(function(items) {
+    return fs.readdirAsync(apps_dir).then(function(items) {
       console.log("Found %d apps.", items.length);
-      return items.map(function(item) {
-        add_item_from_file(apps_dir, item, iTunes, progress_callback);
+      return items.map(function(filename) {
+        return add_item_from_file(apps_dir, filename, iTunes, progress_callback);
       });
-    }).then(callback);
+    });
   });
 }
 
@@ -74,6 +75,7 @@ function add_item_from_file(directory, filename, iTunes, progress_callback) {
     ];
   }).spread(function(info, stat, item) {
     console.log("Populating item", item, "with stats", stats, "and plist", info);
+    return item;
   }).catch(function(err) {
     console.log("FAILED", err);
   }).done();
@@ -105,6 +107,7 @@ function read_info_plist(full_path) {
 
 function find_or_create_item(item_id, source) {
   console.log("Looking for item", item_id, "in", source.name);
+
   return model.Item.query().where({
     source_code: source.source_code,
     source_primary_id: item_id
