@@ -29,27 +29,15 @@ function Source() {
   Model.apply(this, arguments);
 }
 Model.extend(Source);
-// Table name is the only required property.
 Source.tableName = 'sources';
 exports.Source = Source;
-
 
 
 function Item() {
   Model.apply(this, arguments);
 }
 Model.extend(Item);
-// Table name is the only required property.
 Item.tableName = 'items';
-/*
-Item.relationMappings = {
-  items: {
-    relation: Model.OneToManyRelation,
-    from: 'Items.source_code',
-    to: 'Items.source_code'
-  },
-}
-*/
 exports.Item = Item;
 
 
@@ -57,15 +45,7 @@ function ItemVersion() {
   Model.apply(this, arguments);
 }
 Model.extend(ItemVersion);
-// Table name is the only required property.
 ItemVersion.tableName = 'item_versions';
-ItemVersion.relationMappings = {
-  item: {
-    relation: Model.OneToManyRelation,
-    from: 'ItemVersions.source_code',
-    to: 'ItemVersions.source_code'
-  },
-}
 exports.ItemVersion = ItemVersion;
 
 //Relationships
