@@ -2,8 +2,10 @@ var Promise = require("bluebird");
 var fs = require("fs"),
     path = require('path');
 var model = require("../model.js");
+var archive = require('ls-archive')
 
 Promise.promisifyAll(fs);
+Promise.promisifyAll(archive);
 
 var SOURCE_CODE = 'ITUNES';
 
@@ -102,7 +104,10 @@ function add_item_from_file(directory, filename, iTunes, progress_callback) {
 }
 
 function read_info_plist(full_path) {
-  return Promise.resolve({itemId: 1});
+  return archive.readAsync(full_path, "iTunesMetadata.plist").then(
+    function(contents) {
+    return plist.parse(contents);
+  });
 }
 
 function find_or_create_item(item_id, source) {

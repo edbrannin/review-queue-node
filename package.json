@@ -27,7 +27,8 @@
     "sqlite3": "~3.0.10",
     "knex": "~0.8.6",
     "objection": "~0.2.1",
-    "bluebird": "~2.9.34"
+    "bluebird": "~2.9.34",
+    "ls-archive": "~1.2.1"
   },
   "devDependencies": {
     "electron-prebuilt": "~0.30.0",
