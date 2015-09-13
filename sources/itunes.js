@@ -87,14 +87,13 @@ function add_item_from_file(directory, filename, iTunes, progress_callback) {
     //console.log("App at", full_path, "has metadata", info);
     return [
       info,
-      fs.statAsync(full_path),
       find_or_create_item(info.itemId, iTunes)
     ];
-  }).spread(function(info, stats, item) {
+  }).spread(function(info, item) {
     return [
       info,
       fs.statAsync(full_path),
-      find_or_create_item(info.itemId, iTunes),
+      item,
       get_item_at_version(info.itemId, info.bundleShortVersionString)
     ];
   }).spread(function(info, stats, item, hasVersion) {
