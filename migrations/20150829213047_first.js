@@ -25,7 +25,8 @@ exports.up = function(knex, Promise) {
       table.string('file_path').unique().notNullable();
       table.integer('size_compressed_bytes').notNullable();
       table.integer('size_uncompressed_bytes').notNullable();
-      table.text('description')
+      table.text('description');
+      table.text('metadata_json');
       table.timestamps();
 
       table.unique(['id', 'version']);
