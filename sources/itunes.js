@@ -2,7 +2,9 @@ var Promise = require("bluebird");
 var fs = require("fs"),
     path = require('path');
 var model = require("../model.js");
-var archive = require('ls-archive')
+var archive = require('../deps/node-ls-archive/')
+
+archive.configureExtensions({ zip: ['.ipa']});
 
 Promise.promisifyAll(fs);
 Promise.promisifyAll(archive);
@@ -106,8 +108,9 @@ function add_item_from_file(directory, filename, iTunes, progress_callback) {
 function read_info_plist(full_path) {
   return archive.readFileAsync(full_path, "iTunesMetadata.plist").then(
     function(contents) {
-    return plist.parse(contents);
-  });
+      return plist.parse(contents);
+    }
+  );
 }
 
 function find_or_create_item(item_id, source) {
