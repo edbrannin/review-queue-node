@@ -22,13 +22,14 @@
   },
   "dependencies": {
     "archiver": "~0.14.4",
-    "simple-plist": "edbrannin/node-simple-plist#parse-string-or-buffer",
-    "sequelize": "~3.6.0",
-    "sqlite3": "~3.0.10",
-    "knex": "~0.8.6",
-    "objection": "~0.2.1",
     "bluebird": "~2.9.34",
-    "ls-archive": "~1.2.1"
+    "knex": "~0.8.6",
+    "ls-archive": "~1.2.1",
+    "objection": "~0.2.1",
+    "sequelize": "~3.6.0",
+    "simple-plist": "edbrannin/node-simple-plist#parse-string-or-buffer",
+    "sqlite3": "~3.0.10",
+    "tape": "^4.2.0"
   },
   "devDependencies": {
     "electron-prebuilt": "~0.30.0",
