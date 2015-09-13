@@ -84,14 +84,26 @@ function add_item_from_file(directory, filename, iTunes, progress_callback) {
 
   var full_path = path.join(directory, filename);
   return read_info_plist(full_path).then(function(info) {
-    console.log("App at", full_path, "has metadata", info);
+    //console.log("App at", full_path, "has metadata", info);
     return [
       info,
       fs.statAsync(full_path),
       find_or_create_item(info.itemId, iTunes)
     ];
-  }).spread(function(info, stat, item) {
-    console.log("Populating item", item, "with stats", stats, "and plist", info);
+  }).spread(function(info, stats, item) {
+    return [
+      info,
+      fs.statAsync(full_path),
+      find_or_create_item(info.itemId, iTunes),
+      get_item_at_version(info.itemId, info.bundleShortVersionString)
+    ];
+  }).spread(function(info, stats, item, hasVersion) {
+    if (hasVersion) {
+      console.log("Already got version", info.bundleShortVersionString, "of", item.source_primary_id);
+    if (! hasVersion) {
+      console.log("Populating item", item, "with stats", stats, "and plist", info);
+    }
+    get_item_at_version(info.itemId, info.bundleShortVersionString)
     return item;
   }).catch(function(err) {
     console.log("FAILED", err);
@@ -116,6 +128,24 @@ function add_item_from_file(directory, filename, iTunes, progress_callback) {
     item.name = item.plist['itemName']
    *
    */
+}
+
+
+function item_has_version(item, version_short_string) {
+  console.log("Looking for item", item.id, "version", version_short_string);
+
+  return model.ItemVersion.query().where({
+    item_id: item.id,
+    version: version_short_string
+  }).then(function(rows) {
+    if (rows.length == 0) {
+      return false;
+    } else {
+      return true;
+    }
+  }).catch(function(e) {
+    console.log("WHAT.", e);
+  });
 }
 
 function read_info_plist(full_path) {
