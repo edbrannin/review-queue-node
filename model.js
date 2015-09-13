@@ -48,6 +48,13 @@ Model.extend(ItemVersion);
 ItemVersion.tableName = 'item_versions';
 exports.ItemVersion = ItemVersion;
 
+function ItemIdentifier() {
+  Model.apply(this, arguments);
+}
+Model.extend(ItemIdentifier);
+ItemIdentifier.tableName = 'item_identifiers';
+exports.ItemIdentifier = ItemIdentifier;
+
 //Relationships
 
 Source.relationMappings = {
@@ -87,6 +94,17 @@ ItemVersion.relationMappings = {
     join: {
       from: 'items.id',
       to: 'item_versions.item_id'
+    },
+  },
+}
+
+ItemIdentifier.relationMappings = {
+  item: {
+    relation: Model.OneToOneRelation,
+    modelClass: Item,
+    join: {
+      from: 'items.id',
+      to: 'item_identifiers.item_id'
     },
   },
 }
