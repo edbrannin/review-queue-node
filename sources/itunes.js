@@ -68,7 +68,7 @@ exports.scan = function(progress_callback) {
     return fs.readdirAsync(apps_dir).then(function(items) {
       console.log("Found %d apps.", items.length);
       //DEBUGGING
-      return Promise.all(items.slice(0, 10).map(function(filename) {
+      return Promise.all(items.slice(0, 5).map(function(filename) {
         return add_item_from_file(apps_dir, filename, iTunes, progress_callback);
       }));
     });
@@ -83,29 +83,31 @@ function add_item_from_file(directory, filename, iTunes, progress_callback) {
   console.log("Adding", filename, "to", iTunes.source_code, "(" + iTunes.name + ")");
 
   var full_path = path.join(directory, filename);
-  return read_info_plist(full_path).then(function(info) {
-    //console.log("App at", full_path, "has metadata", info);
-    return [
-      info,
-      find_or_create_item(info.itemId, iTunes)
-    ];
-  }).spread(function(info, item) {
-    return [
-      info,
-      fs.statAsync(full_path),
-      item,
-      get_item_at_version(info.itemId, info.bundleShortVersionString)
-    ];
-  }).spread(function(info, stats, item, hasVersion) {
-    if (hasVersion) {
-      console.log("Already got version", info.bundleShortVersionString, "of", item.source_primary_id);
-    if (! hasVersion) {
-      console.log("Populating item", item, "with stats", stats, "and plist", info);
+  return model.ItemVersion.query().where({
+    file_path: full_path,
+  }).then(function(rows) {
+    if (rows.length > 0) {
+      console.log("Skipping already-imported:", full_path);
+      return Promise.resolve(full_path);
+    } else {
+      console.log("Importing:", full_path);
+      return read_info_plist(full_path).then(function(info) {
+        //console.log("App at", full_path, "has metadata", info);
+        return [
+          info,
+          find_or_create_item(info.itemId, iTunes)
+        ];
+      }).spread(function(info, item) {
+        return [
+          full_path,
+          info,
+          fs.statAsync(full_path),
+          item
+        ];
+      }).spread(populate_item).catch(function(err) {
+        console.log("FAILED", err);
+      });
     }
-    get_item_at_version(info.itemId, info.bundleShortVersionString)
-    return item;
-  }).catch(function(err) {
-    console.log("FAILED", err);
   });
 
   /*
@@ -129,22 +131,45 @@ function add_item_from_file(directory, filename, iTunes, progress_callback) {
    */
 }
 
-
-function item_has_version(item, version_short_string) {
-  console.log("Looking for item", item.id, "version", version_short_string);
-
-  return model.ItemVersion.query().where({
-    item_id: item.id,
-    version: version_short_string
-  }).then(function(rows) {
-    if (rows.length == 0) {
-      return false;
-    } else {
-      return true;
-    }
-  }).catch(function(e) {
-    console.log("WHAT.", e);
-  });
+function populate_item(full_path, metadata, stats, item) {
+  //console.log("populate_item(", full_path, metadata, stats, item, hasVersion, ")");
+  console.log("Populating item", item, "with stats", stats, "and plist", metadata);
+  var now = Date.now();
+  return Promise.all([
+    // TODO add current_version_id later
+    model.ItemVersion.query().insert({
+      item_id: item.id,
+      created_at: now,
+      updated_at: now,
+      name: metadata.itemName,
+      version: metadata.bundleShortVersionString,
+      file_path: full_path,
+      size_compressed_bytes: stats.size,
+      size_uncompressed_bytes: 0,
+      metadata_json: JSON.stringify(metadata),
+    }),
+    model.ItemIdentifier.query().insert({
+      item_id: item.id,
+      identifier_name: 'display_name',
+      value: metadata.bundleDisplayName,
+      created_at: now,
+      updated_at: now,
+    }),
+    model.ItemIdentifier.query().insert({
+      item_id: item.id,
+      identifier_name: 'item_name',
+      value: metadata.itemName,
+      created_at: now,
+      updated_at: now,
+    }),
+    model.ItemIdentifier.query().insert({
+      item_id: item.id,
+      identifier_name: 'bundle_id',
+      value: metadata.softwareVersionBundleId,
+      created_at: now,
+      updated_at: now,
+    }),
+  ]);
 }
 
 function read_info_plist(full_path) {
