@@ -2,7 +2,8 @@ var Promise = require("bluebird");
 var fs = require("fs"),
     path = require('path');
 var model = require("../model.js");
-var archive = require('../deps/node-ls-archive/')
+var plist = require('simple-plist');
+var archive = require('../deps/node-ls-archive/');
 
 archive.configureExtensions({ zip: ['.ipa']});
 
@@ -10,6 +11,13 @@ Promise.promisifyAll(fs);
 Promise.promisifyAll(archive);
 
 var SOURCE_CODE = 'ITUNES';
+
+// http://stackoverflow.com/a/2548133/25625
+if (typeof String.prototype.endsWith !== 'function') {
+    String.prototype.endsWith = function(suffix) {
+        return this.indexOf(suffix, this.length - suffix.length) !== -1;
+    };
+}
 
 /*
  * http://stackoverflow.com/questions/9080085/node-js-find-home-directory-in-platform-agnostic-way
@@ -59,7 +67,8 @@ exports.scan = function(progress_callback) {
     var apps_dir = mobile_apps_dir()
     return fs.readdirAsync(apps_dir).then(function(items) {
       console.log("Found %d apps.", items.length);
-      return Promise.all(items.map(function(filename) {
+      //DEBUGGING
+      return Promise.all(items.slice(0, 10).map(function(filename) {
         return add_item_from_file(apps_dir, filename, iTunes, progress_callback);
       }));
     });
@@ -67,6 +76,10 @@ exports.scan = function(progress_callback) {
 }
 
 function add_item_from_file(directory, filename, iTunes, progress_callback) {
+  if (! filename.endsWith('.ipa')) {
+    console.log("Skipping", filename);
+    return Promise.resolve(undefined);
+  }
   console.log("Adding", filename, "to", iTunes.source_code, "(" + iTunes.name + ")");
 
   var full_path = path.join(directory, filename);
