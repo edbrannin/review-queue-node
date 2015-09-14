@@ -160,10 +160,15 @@ Item.prototype.setIdentifier = function(identifier_name, value) {
 }
 
 Item.prototype.addTag = function(tag_name) {
+  if (! tag_name) {
+    //Silently ignore undefined
+    return tag_name;
+  }
+
   var now = Date.now();
   var item_id = this.id;
   if (! item_id) {
-    console.log("WARNING: Null Item ID:", this);
+    throw new Error("Unknown Item ID: " + this);
   }
   return Tag.withName(tag_name).then(function(tag) {
     return ItemTag.query().where({
