@@ -176,7 +176,8 @@ function tags_for_metadata(metadata) {
 
 function populate_item(full_path, metadata, stats, item) {
   //console.log("populate_item(", full_path, metadata, stats, item, hasVersion, ")");
-  console.log("Populating item", item, "with stats", stats, "and plist", metadata);
+  //console.log("Populating item", item, "with stats", stats, "and plist", metadata);
+  console.log("Saving info for", full_path);
   var now = Date.now();
 
   return Promise.all([
@@ -201,7 +202,9 @@ function populate_item(full_path, metadata, stats, item) {
     Promise.all(tags_for_metadata(metadata).map(item.addTag.bind(item))),
     item.setLink('softwareIcon57x57URL', metadata.softwareIcon57x57URL),
     //TODO add Link to iTunes Store
-  ]);
+  ]).then(function() {
+    console.log("Done importing", full_path);
+  });
 }
 
 function read_info_plist(full_path) {
