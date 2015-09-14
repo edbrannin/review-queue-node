@@ -1,6 +1,8 @@
 var Knex = require('knex');
-var Model = require('objection').Model;
+var objection = require('objection');
+var Model = objection.Model;
 
+//TODO Config-per-nvironment & unit tests
 var knex = Knex({
   client: 'sqlite3',
   connection: {
@@ -54,6 +56,27 @@ function ItemIdentifier() {
 Model.extend(ItemIdentifier);
 ItemIdentifier.tableName = 'item_identifiers';
 exports.ItemIdentifier = ItemIdentifier;
+
+function Tag() {
+  Model.apply(this, arguments);
+}
+Model.extend(Tag);
+Tag.tableName = 'tags';
+exports.Tag = Tag;
+
+function ItemTag() {
+  Model.apply(this, arguments);
+}
+Model.extend(ItemTag);
+ItemTag.tableName = 'items_tags';
+exports.ItemTag = ItemTag;
+
+function ItemLink() {
+  Model.apply(this, arguments);
+}
+Model.extend(ItemLink);
+ItemLink.tableName = 'item_links';
+exports.ItemLink = ItemLink;
 
 //Relationships
 
@@ -109,6 +132,101 @@ ItemIdentifier.relationMappings = {
   },
 }
 
+// Sugar
+
+// TODO Test
+Item.prototype.setIdentifier = function(identifier_name, value) {
+  var now = Date.now();
+  var existing_ientifier = ItemIdentifier.query().where({
+    item_id: this.id,
+    identifier_name: identifier_name,
+  })
+  return existing_ientifier.bind(this).then(function(rows) {
+    if (rows.length == 0) {
+      return ItemIdentifier.query().insert({
+        item_id: this.id,
+        identifier_name: identifier_name,
+        value: value,
+        created_at: now,
+        updated_at: now,
+      });
+    } else {
+      return existing_ientifier.update({
+        value: value,
+        updated_at: now,
+      });
+    }
+  });
+}
+
+Item.prototype.addTag = function(tag_name) {
+  var now = Date.now();
+  var item_id = this.id;
+  if (! item_id) {
+    console.log("WARNING: Null Item ID:", this);
+  }
+  return Tag.withName(tag_name).then(function(tag) {
+    return ItemTag.query().where({
+      tag_id: tag.id,
+      item_id: item_id,
+    }).then(function(rows) {
+      if (rows.length > 0) {
+        return rows[0];
+      } else {
+        return ItemTag.query().insert({
+          tag_id: tag.id,
+          item_id: item_id,
+          created_at: now,
+          updated_at: now,
+        });
+      }
+    });
+  });
+}
+
+Tag.withName = function(tag_name) {
+  return objection.transaction(Tag, function(Tag) {
+    return Tag.query().where({
+      name: tag_name,
+    }).then(function(rows) {
+      if (rows.length == 0) {
+        var now = Date.now();
+        return Tag.query().insert({
+          name: tag_name,
+          created_at: now,
+          updated_at: now,
+        });
+      } else {
+        return rows[0];
+      }
+    });
+  });
+}
+
+Item.prototype.setLink = function(name, url) {
+  var now = Date.now();
+  var q = ItemLink.query().where({
+    item_id: this.id,
+    link_type_name: name,
+  });
+  return q.bind(this).then(function(rows) {
+    if (rows.length == 0) {
+      return ItemLink.query().insert({
+        item_id: this.id,
+        link_type_name: name,
+        url: url,
+        created_at: now,
+        updated_at: now,
+      });
+    } else {
+      return q.update({
+        url: url,
+        updated_at: now,
+      });
+    }
+  });
+}
+
 /*
  * Migrations written:
  *
@@ -130,8 +248,7 @@ ItemIdentifier.relationMappings = {
  * - size_uncompressed_bytes
  * - description
  * - file_path
- * - filename (TODO)
- * - plist_json (TODO)
+ * - metadata_json
  *
  * ItemIdentifier
  * - item_id
