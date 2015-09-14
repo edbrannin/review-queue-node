@@ -5,12 +5,16 @@ var model = require("../model.js");
 var plist = require('simple-plist');
 var archive = require('../deps/node-ls-archive/');
 
+Promise.longStackTraces();
+
 archive.configureExtensions({ zip: ['.ipa']});
 
 Promise.promisifyAll(fs);
 Promise.promisifyAll(archive);
 
 var SOURCE_CODE = 'ITUNES';
+
+var DEBUG_ITEM_LIMIT = undefined;
 
 // http://stackoverflow.com/a/2548133/25625
 if (typeof String.prototype.endsWith !== 'function') {
@@ -68,7 +72,10 @@ exports.scan = function(progress_callback) {
     return fs.readdirAsync(apps_dir).then(function(items) {
       console.log("Found %d apps.", items.length);
       //DEBUGGING
-      return Promise.all(items.slice(0, 5).map(function(filename) {
+      if (DEBUG_ITEM_LIMIT) {
+        items = items.slice(0, DEBUG_ITEM_LIMIT);
+      }
+      return Promise.all(items.map(function(filename) {
         return add_item_from_file(apps_dir, filename, iTunes, progress_callback);
       }));
     });
@@ -105,7 +112,7 @@ function add_item_from_file(directory, filename, iTunes, progress_callback) {
           item
         ];
       }).spread(populate_item).catch(function(err) {
-        console.log("FAILED", err);
+        console.error(err.stack);
       });
     }
   });
@@ -131,44 +138,69 @@ function add_item_from_file(directory, filename, iTunes, progress_callback) {
    */
 }
 
+function tags_for_metadata(metadata) {
+  var tags = [];
+  if (metadata.genre) {
+    tags.push(metadata.genre);
+  }
+
+  if (metadata.subgenres) {
+    metadata.subgenres.forEach(function(subgenre) {
+      tags.push(subgenre.genre);
+    });
+  }
+
+  if (metadata.rating && metadata.rating.label) {
+    tags.push(metadata.rating.label);
+  }
+
+  if (metadata.gameCenterEnabled) {
+    tags.push("gameCenterEnabled");
+  }
+
+  if (metadata.softwareSupportedDeviceIds.indexOf(4) == -1) {
+    tags.push('iPhone');
+  } else if (metadata.softwareSupportedDeviceIds.length > 1) {
+    //FIXME May not be accurate after Apple TV & Watch apps
+    tags.push('Universal');
+  } else {
+    tags.push('iPad');
+  }
+
+  if (metadata.priceDisplay) {
+    tags.push(metadata.priceDisplay);
+  }
+
+  return tags;
+}
+
 function populate_item(full_path, metadata, stats, item) {
   //console.log("populate_item(", full_path, metadata, stats, item, hasVersion, ")");
   console.log("Populating item", item, "with stats", stats, "and plist", metadata);
   var now = Date.now();
+
   return Promise.all([
+    // TODO http://vincit.github.io/objection.js/global.html#transaction
     // TODO add current_version_id later
     model.ItemVersion.query().insert({
       item_id: item.id,
       created_at: now,
       updated_at: now,
       name: metadata.itemName,
-      version: metadata.bundleShortVersionString,
+      version: metadata.bundleShortVersionString || metadata.priceDisplay || "0",
       file_path: full_path,
       size_compressed_bytes: stats.size,
       size_uncompressed_bytes: 0,
       metadata_json: JSON.stringify(metadata),
+      //TODO metadata.releaseDate
+      //TODO metadata.purchaseDate
     }),
-    model.ItemIdentifier.query().insert({
-      item_id: item.id,
-      identifier_name: 'display_name',
-      value: metadata.bundleDisplayName,
-      created_at: now,
-      updated_at: now,
-    }),
-    model.ItemIdentifier.query().insert({
-      item_id: item.id,
-      identifier_name: 'item_name',
-      value: metadata.itemName,
-      created_at: now,
-      updated_at: now,
-    }),
-    model.ItemIdentifier.query().insert({
-      item_id: item.id,
-      identifier_name: 'bundle_id',
-      value: metadata.softwareVersionBundleId,
-      created_at: now,
-      updated_at: now,
-    }),
+    metadata.bundleDisplayName && item.setIdentifier('display_name', metadata.bundleDisplayName),
+    item.setIdentifier('item_name', metadata.itemName),
+    item.setIdentifier('bundle_id', metadata.softwareVersionBundleId),
+    Promise.all(tags_for_metadata(metadata).map(item.addTag)),
+    item.setLink('softwareIcon57x57URL', metadata.softwareIcon57x57URL),
+    //TODO add Link to iTunes Store
   ]);
 }
 
@@ -202,6 +234,6 @@ function find_or_create_item(item_id, source) {
       return rows[0];
     }
   }).catch(function(e) {
-    console.log("WHAT.", e);
+    console.error(e.stack);
   });
 }
