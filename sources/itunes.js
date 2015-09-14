@@ -14,7 +14,7 @@ Promise.promisifyAll(archive);
 
 var SOURCE_CODE = 'ITUNES';
 
-var DEBUG_ITEM_LIMIT = undefined;
+var DEBUG_ITEM_LIMIT = 15;
 
 // http://stackoverflow.com/a/2548133/25625
 if (typeof String.prototype.endsWith !== 'function') {
@@ -139,10 +139,12 @@ function add_item_from_file(directory, filename, iTunes, progress_callback) {
 }
 
 function tags_for_metadata(metadata) {
+  // https://developer.xamarin.com/guides/ios/deployment,_testing,_and_metrics/app_distribution/itunesmetadata/#iTunesMetadata_4
   var tags = [];
-  if (metadata.genre) {
-    tags.push(metadata.genre);
-  }
+
+  tags.push(metadata.priceDisplay);
+  tags.push(metadata.artistName);
+  tags.push(metadata.genre);
 
   if (metadata.subgenres) {
     metadata.subgenres.forEach(function(subgenre) {
@@ -150,7 +152,7 @@ function tags_for_metadata(metadata) {
     });
   }
 
-  if (metadata.rating && metadata.rating.label) {
+  if (metadata.rating) {
     tags.push(metadata.rating.label);
   }
 
@@ -167,9 +169,7 @@ function tags_for_metadata(metadata) {
     tags.push('iPad');
   }
 
-  if (metadata.priceDisplay) {
-    tags.push(metadata.priceDisplay);
-  }
+  console.log("App with Bundle ID", metadata.softwareVersionBundleId, "getting tagged with", tags);
 
   return tags;
 }
@@ -198,7 +198,7 @@ function populate_item(full_path, metadata, stats, item) {
     metadata.bundleDisplayName && item.setIdentifier('display_name', metadata.bundleDisplayName),
     item.setIdentifier('item_name', metadata.itemName),
     item.setIdentifier('bundle_id', metadata.softwareVersionBundleId),
-    Promise.all(tags_for_metadata(metadata).map(item.addTag)),
+    Promise.all(tags_for_metadata(metadata).map(item.addTag.bind(item))),
     item.setLink('softwareIcon57x57URL', metadata.softwareIcon57x57URL),
     //TODO add Link to iTunes Store
   ]);
