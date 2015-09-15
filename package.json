@@ -32,10 +32,10 @@
     "tape": "^4.2.0"
   },
   "devDependencies": {
-    "electron-prebuilt": "~0.30.0",
-    "postcss": "~4.1.16",
+    "electron-prebuilt": "^0.32.2",
     "gulp": "~3.9.0",
     "intern": "~2.2.2",
+    "postcss": "~4.1.16",
     "sequelize-cli": "~1.7.4"
   }
 }
