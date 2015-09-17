@@ -34,6 +34,14 @@ Goals:
 
 * https://docs.npmjs.com/files/package.json
 
+## Scraping
+
+* https://scotch.io/tutorials/scraping-the-web-with-node-js
+* http://www.smashingmagazine.com/2015/04/web-scraping-with-nodejs/
+* https://github.com/request/request
+* https://www.npmjs.com/package/cheerio
+
+
 ## Database
 
 * http://mongoosejs.com/ (MongoDB)
