@@ -26,6 +26,7 @@
     "knex": "~0.8.6",
     "ls-archive": "~1.2.1",
     "objection": "~0.2.1",
+    "react": "^0.13.3",
     "react-templates": "^0.2.0",
     "sequelize": "~3.6.0",
     "simple-plist": "edbrannin/node-simple-plist#parse-string-or-buffer",
@@ -33,10 +34,22 @@
     "tape": "^4.2.0"
   },
   "devDependencies": {
+    "babel": "^5.8.23",
+    "babel-core": "^5.8.24",
+    "babel-loader": "^5.3.2",
+    "css-loader": "^0.18.0",
+    "electron-packager": "^5.1.0",
     "electron-prebuilt": "^0.32.2",
+    "electron-rebuild": "^1.0.0",
     "gulp": "~3.9.0",
     "intern": "~2.2.2",
+    "less": "^2.5.1",
+    "less-loader": "^2.2.1",
+    "node-libs-browser": "^0.5.3",
     "postcss": "~4.1.16",
-    "sequelize-cli": "~1.7.4"
+    "sequelize-cli": "~1.7.4",
+    "style-loader": "^0.12.4",
+    "webpack": "^1.12.2",
+    "webpack-dev-server": "^1.11.0"
   }
 }
