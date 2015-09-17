@@ -26,9 +26,10 @@
     "knex": "~0.8.6",
     "ls-archive": "~1.2.1",
     "objection": "~0.2.1",
+    "react-templates": "^0.2.0",
     "sequelize": "~3.6.0",
     "simple-plist": "edbrannin/node-simple-plist#parse-string-or-buffer",
-    "sqlite3": "~3.0.10",
+    "sqlite3": "~3.1.0",
     "tape": "^4.2.0"
   },
   "devDependencies": {
