@@ -4,4 +4,9 @@ require('../less/main.less');
 
 import React from "react";
 
-React.render(<div className="myDiv">Hello Electron!</div>, document.getElementById('content'));
+//require('remote');
+//var model = remote.require('model.js');
+
+var ed = "Edward";
+
+React.render(<div className="myDiv">Hello {ed}!</div>, document.getElementById('content'));

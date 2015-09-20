@@ -4,7 +4,9 @@
   "description": "Review queue for your iOS apps (Backlog)",
   "main": "index.js",
   "scripts": {
-    "test": "node test.js"
+    "start": "electron .",
+    "watch": "./node_modules/.bin/webpack-dev-server",
+    "electron-rebuild": "./node_modules/.bin/electron-rebuild"
   },
   "repository": {
     "type": "git",
@@ -39,7 +41,7 @@
     "babel-loader": "^5.3.2",
     "css-loader": "^0.18.0",
     "electron-packager": "^5.1.0",
-    "electron-prebuilt": "^0.32.2",
+    "electron-prebuilt": "^0.33.0",
     "electron-rebuild": "^1.0.0",
     "gulp": "~3.9.0",
     "intern": "~2.2.2",
@@ -51,10 +53,5 @@
     "style-loader": "^0.12.4",
     "webpack": "^1.12.2",
     "webpack-dev-server": "^1.11.0"
-  },
-  "scripts": {
-    "start": "electron .",
-    "watch": "./node_modules/.bin/webpack-dev-server",
-    "electron-rebuild": "./node_modules/.bin/electron-rebuild"
   }
 }
