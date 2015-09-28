@@ -274,3 +274,9 @@ Item.prototype.setLink = function(name, url) {
  * - created_by => Person.id
  *
  */
+
+
+
+exports.sources = function() {
+  return Source.query();
+}
