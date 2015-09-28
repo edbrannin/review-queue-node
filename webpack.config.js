@@ -30,7 +30,7 @@ module.exports = {
 
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.IgnorePlugin(new RegExp("^(fs|ipc|remote)$"))
+    new webpack.IgnorePlugin(new RegExp("^(fs|ipc)$"))
   ],
 
   target: 'atom'
