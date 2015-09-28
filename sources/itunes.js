@@ -216,7 +216,7 @@ function read_info_plist(full_path) {
 }
 
 function find_or_create_item(item_id, source) {
-  console.log("Looking for item", item_id, "in", source.name);
+  //console.log("Looking for item", item_id, "in", source.name);
 
   return model.Item.query().where({
     source_code: source.source_code,
