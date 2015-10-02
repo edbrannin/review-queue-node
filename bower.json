@@ -1,0 +1,24 @@
+{
+  "name": "review-queue-ios",
+  "main": "index.js",
+  "version": "0.0.0",
+  "homepage": "https://github.com/edbrannin/review-queue-node",
+  "authors": [
+    "Ed Brannin <edbrannin@gmail.com>"
+  ],
+  "description": "Review queue for your iOS apps (Backlog)",
+  "moduleType": [
+    "node"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+  }
+}
