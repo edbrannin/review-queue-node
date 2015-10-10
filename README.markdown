@@ -14,13 +14,18 @@ Goals:
 * Save/restore app Documents & Preferences from a connected iOS device (Rquires ifuse)
     * https://github.com/mmalecki/node-mount ??
 
+## Reference short-list
+
+* http://wix.github.io/react-templates/
+* WebPack
+* https://github.com/AlexanderPavlenko/react-templates-loader
+
 
 ## Things to maybe use
 
 * http://www.toptal.com/nodejs/why-the-hell-would-i-use-node-js
 
 * http://electron.atom.io/ (Desktop app!)
-* http://wix.github.io/react-templates/
 * https://www.npmjs.com/package/simple-plist
 * https://www.npmjs.com/package/archiver
 * http://davidtheclark.com/its-time-for-everyone-to-learn-about-postcss/
@@ -33,6 +38,11 @@ Goals:
 * http://loopback.io/ (framework that can help make native mobile apps)
 
 * https://docs.npmjs.com/files/package.json
+
+## Process managing
+
+* Supervisord
+* https://mmonit.com/monit/
 
 ## Scraping
 
@@ -79,3 +89,18 @@ Goals:
 
 * https://www.npmjs.com/package/statsd
 * https://www.npmjs.com/package/express
+
+## Linting
+
+* http://eslint.org/
+* http://stylelint.io/
+
+## Learn about Streams and stuff
+
+* https://github.com/ericelliott/essential-javascript-links#essential-javascript-links
+* https://strongloop.com/strongblog/node-js-event-loop/
+* https://medium.com/javascript-scene/what-every-unit-test-needs-f6cd34d9836d
+* http://thenodeway.io/
+* https://nodejs.org/api/stream.html
+* https://github.com/substack/stream-handbook
+
