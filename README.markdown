@@ -17,9 +17,16 @@ Goals:
 ## Reference short-list
 
 * http://wix.github.io/react-templates/
-* WebPack
+* http://webpack.github.io/docs/configuration.html
+* https://github.com/webpack/docs/wiki/configuration
 * https://github.com/AlexanderPavlenko/react-templates-loader
 
+* https://github.com/sindresorhus/awesome-nodejs
+* http://nodeschool.io/#workshoppers
+
+* http://facebook.github.io/flux/docs/overview.html#content
+* https://github.com/wix/react-templates#installation
+* https://www.quora.com/I-want-to-learn-Node-js-and-develop-a-web-app-is-it-possible-in-4-months/answer/Pooria-Atarzadeh
 
 ## Things to maybe use
 
