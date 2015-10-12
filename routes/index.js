@@ -19,6 +19,8 @@ router.get('/queue.json', function(req, res, next) {
   q.then(function(items) {
     items = items.map(function(item) {
       item.tags = [];
+      item.links = { softwareIcon57x57URL: "http://lorempixel.com/57/57/" };
+      return item;
     });
     res.json(items);
   });
