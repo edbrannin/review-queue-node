@@ -122,6 +122,9 @@ ItemVersion.relationMappings = {
       to: 'item_versions.item_id'
     },
   },
+  //TODO Tags
+  //TODO Identifiers
+  //TODO Links
 }
 
 ItemIdentifier.relationMappings = {
