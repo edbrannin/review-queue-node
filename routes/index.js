@@ -1,3 +1,4 @@
+var Promise = require("bluebird");
 var express = require('express');
 var router = express.Router();
 
@@ -26,9 +27,23 @@ router.get('/queue.json', function(req, res, next) {
   });
 });
 
-
 router.post('/tag_items', function(req, res, next) {
+  console.log(req);
+  if (! Array.isArray(req.body.item)) {
+    req.body.item = [req.body.item];
+  }
   console.log(req.body);
+
+  var tag = req.body.tag;
+  var items = req.body.item;
+
+  model.Item.query().whereIn('id', items).then(function(items) {
+    return Promise.all(items.map(function(item) {
+      return item.addTag(tag);
+    }));
+  }).then(function() {
+    res.json({ status: "OK" });
+  });
 });
 
 module.exports = router;
