@@ -57,3 +57,5 @@ node_modules
 # Debug log from npm
 npm-debug.log
 bower_components
+public/stylesheets/*.css
+public/stylesheets/*.css.map
