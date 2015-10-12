@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>{{ title }}</title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="/bower_components/react/react.js"></script>
+    <script src="/bower_components/react/JSXTransformer.js"></script>
+    <script src="/bower_components/jquery/dist/jquery.js"></script>
+    <title>Review Queue</title>
+    <link href="/stylesheets/style.css" rel="stylesheet" />
   </head>
   <body>
-    <h1>{{ title }}</h1>
-    <p>Welcome to {{ title }}</p>
+    <div id="content"></div>
+    <script type="text/jsx" src="/javascripts/app.jsx" />
   </body>
 </html>
