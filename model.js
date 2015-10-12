@@ -108,6 +108,9 @@ Item.relationMappings = {
       to: 'sources.source_code'
     },
   },
+  //TODO Tags
+  //TODO Identifiers
+  //TODO Links
 }
 
 ItemVersion.relationMappings = {
