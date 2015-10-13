@@ -16,7 +16,16 @@ router.get('/queue.json', function(req, res, next) {
     .groupBy('item_id')
     //.having('')
     .eager('[item, tags, links]');
+    //
   //TODO Filter by tags
+  var exclude_tags = ['Keep', 'Delete', 'Backlog'];
+  var tagSubquery = model.Tag.query().select('id').whereIn('name', exclude_tags)
+  if (false) {
+    tagSubquery = tagSubquery.whereIn('name', include_tags);
+  }
+  var hideTags = model.ItemTag.query().select('item_id').whereIn('tag_id', tagSubquery);
+  q.whereNotIn('item_id', hideTags);
+
   q.then(function(items) {
     items = items.map(function(item) {
       item.tags = item.tags.map(function(tag) { return tag.name; });
