@@ -64,4 +64,19 @@ router.post('/tag_items', function(req, res, next) {
   });
 });
 
+router.get('/to_delete.json', function(req, res) {
+  var q = model.ItemVersion.query()
+    .orderBy('size_compressed_bytes', 'desc')
+    .groupBy('item_id')
+    //.having('')
+    .eager('[links]');
+  q = q.whereIn('item_id', model.itemIdsTagged('Delete'));
+  q.then(function(items) {
+    items = items.map(function(item) {
+      return { name: item.name, file_path: item.file_path };
+    });
+    res.json(items);
+  });
+});
+
 module.exports = router;

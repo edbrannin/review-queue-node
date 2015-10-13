@@ -21,6 +21,7 @@ var TagFilter = React.createClass({
         singletons.filter = this;
     },
     render: function() {
+      //TODO Remove on click
         var tags = this.state.tags;
         return (
             <ul className="tagFilter">
