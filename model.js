@@ -108,7 +108,19 @@ Item.relationMappings = {
       to: 'sources.source_code'
     },
   },
-  //TODO Tags
+  tags: {
+    relation: Model.ManyToManyRelation,
+    modelClass: Tag,
+    join: {
+      from: 'items.id',
+      // ManyToMany relation needs the `through` object to describe the join table.
+      through: {
+        from: 'items_tags.item_id',
+        to: 'items_tags.tag_id'
+      },
+      to: 'tags.id'
+    }
+  },
   //TODO Identifiers
   //TODO Links
 }
@@ -122,7 +134,19 @@ ItemVersion.relationMappings = {
       to: 'item_versions.item_id'
     },
   },
-  //TODO Tags
+  tags: {
+    relation: Model.ManyToManyRelation,
+    modelClass: Tag,
+    join: {
+      from: 'item_versions.item_id',
+      // ManyToMany relation needs the `through` object to describe the join table.
+      through: {
+        from: 'items_tags.item_id',
+        to: 'items_tags.tag_id'
+      },
+      to: 'tags.id'
+    }
+  },
   //TODO Identifiers
   //TODO Links
 }

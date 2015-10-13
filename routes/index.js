@@ -15,11 +15,11 @@ router.get('/queue.json', function(req, res, next) {
     .orderBy('size_compressed_bytes', 'desc')
     .groupBy('item_id')
     //.having('')
-    .eager('item');
+    .eager('[item, tags]');
   //TODO Filter by tags
   q.then(function(items) {
     items = items.map(function(item) {
-      item.tags = [];
+      item.tags = item.tags.map(function(tag) { return tag.name; });
       item.links = { softwareIcon57x57URL: "http://lorempixel.com/57/57/" };
       return item;
     });
