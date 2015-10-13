@@ -15,12 +15,15 @@ router.get('/queue.json', function(req, res, next) {
     .orderBy('size_compressed_bytes', 'desc')
     .groupBy('item_id')
     //.having('')
-    .eager('[item, tags]');
+    .eager('[item, tags, links]');
   //TODO Filter by tags
   q.then(function(items) {
     items = items.map(function(item) {
       item.tags = item.tags.map(function(tag) { return tag.name; });
-      item.links = { softwareIcon57x57URL: "http://lorempixel.com/57/57/" };
+      item.links = item.links.reduce(function(links, current_link) {
+        links[current_link.link_type_name] = current_link.url;
+        return links;
+      }, {});
       return item;
     });
     res.json(items);

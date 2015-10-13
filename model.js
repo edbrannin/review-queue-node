@@ -148,7 +148,14 @@ ItemVersion.relationMappings = {
     }
   },
   //TODO Identifiers
-  //TODO Links
+  links: {
+    relation: Model.OneToManyRelation,
+    modelClass: ItemLink,
+    join: {
+      from: 'item_versions.item_id',
+      to: 'item_links.item_id'
+    },
+  },
 }
 
 ItemIdentifier.relationMappings = {
