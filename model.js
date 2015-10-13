@@ -7,7 +7,8 @@ var knex = Knex({
   client: 'sqlite3',
   connection: {
     filename: 'dev.sqlite3'
-  }
+  },
+  debug: true,
 });
 
 Model.knex(knex);
@@ -317,3 +318,9 @@ Item.prototype.setLink = function(name, url) {
 exports.sources = function() {
   return Source.query();
 }
+
+exports.itemIdsTagged = function(tags) {
+  var query = ItemTag.query().select('item_id');
+  var tagSubquery = Tag.query().select('id').whereIn('name', tags);
+  return query.whereIn('tag_id', tagSubquery);
+};

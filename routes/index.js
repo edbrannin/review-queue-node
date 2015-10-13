@@ -10,6 +10,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/queue.json', function(req, res, next) {
+  console.log(req.query);
   var q = model.ItemVersion.query()
     .limit(12)
     .orderBy('size_compressed_bytes', 'desc')
@@ -19,12 +20,17 @@ router.get('/queue.json', function(req, res, next) {
     //
   //TODO Filter by tags
   var exclude_tags = ['Keep', 'Delete', 'Backlog'];
-  var tagSubquery = model.Tag.query().select('id').whereIn('name', exclude_tags)
-  if (false) {
-    tagSubquery = tagSubquery.whereIn('name', include_tags);
+  if (req.query.tag) {
+    if (! Array.isArray(req.query.tag)) {
+      req.query.tag = [req.query.tag];
+    }
+
+    q = req.query.tag.reduce(function(qq, tag) {
+      console.log("Limiting query to include tagged", tag);
+      return qq.whereIn('item_id', model.itemIdsTagged(tag));
+    }, q);
   }
-  var hideTags = model.ItemTag.query().select('item_id').whereIn('tag_id', tagSubquery);
-  q.whereNotIn('item_id', hideTags);
+  q = q.whereNotIn('item_id', model.itemIdsTagged(exclude_tags));
 
   q.then(function(items) {
     items = items.map(function(item) {
@@ -40,7 +46,7 @@ router.get('/queue.json', function(req, res, next) {
 });
 
 router.post('/tag_items', function(req, res, next) {
-  console.log(req);
+  console.log(req.headers);
   if (! Array.isArray(req.body.item)) {
     req.body.item = [req.body.item];
   }
