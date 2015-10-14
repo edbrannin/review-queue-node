@@ -201,7 +201,7 @@ var QueueItem = React.createClass({
                     onClick={this.handleClick} />
                 <div className="size">{size_mb}.{size_kb} MB</div>
                 <div className="name">
-                <a href={item.url}>{item.name}</a>
+                <a href={item.links.itunes_url}>{item.name}</a>
                 </div>
                 <ul className="tags">{tagNodes}</ul>
                 <TagButtons item={item} />

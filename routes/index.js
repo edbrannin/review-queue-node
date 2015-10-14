@@ -12,7 +12,7 @@ router.get('/', function(req, res, next) {
 router.get('/queue.json', function(req, res, next) {
   console.log(req.query);
   var q = model.ItemVersion.query()
-    .limit(12)
+    .limit(18)
     .orderBy('size_compressed_bytes', 'desc')
     .groupBy('item_id')
     //.having('')
@@ -39,6 +39,7 @@ router.get('/queue.json', function(req, res, next) {
         links[current_link.link_type_name] = current_link.url;
         return links;
       }, {});
+      item.links.itunes_url = "https://itunes.apple.com/us/app/id" + item.item.source_primary_id;
       return item;
     });
     res.json(items);
